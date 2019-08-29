@@ -21,13 +21,10 @@ class MOBrowser extends React.Component{
         return (
                 
         <div>
-            <h3><FontAwesomeIcon icon={MOBrowser.icon}/> MO Browser</h3>
-
-            <div className="card  mb-2">
-                <div className="card-body p-3">
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon={MOBrowser.icon}/> MO Browser</legend>
                     <a href="#" className="launch-network-tree" onClick={this.setSidePanel}><FontAwesomeIcon icon="arrow-right"/> Launch MO Browser</a>        
-                </div>
-            </div>
+			</fieldset>
         </div>
         );
     }

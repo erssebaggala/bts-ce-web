@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getReports, setReportFilter, deleteReport, getReportInfo, removeCategory,
-         clearReportCreateState, clearReportTreeError, getCategory, 
-         clearEditCategoryState, renameReportCategory } from './reports-actions';
+         clearReportCreateState, clearReportTreeError, getCategory, saveCategory,
+         clearEditCategoryState, renameReportCategory, clearNewCategoryState, 
+		 clearCreateCompReportState		 } from './reports-actions';
 import { addTab, closeTab } from '../layout/uilayout-actions';
 import { Classes, Icon, ITreeNode, Tooltip, Tree, FormGroup, InputGroup, 
          ContextMenu, ContextMenuTarget, Menu, MenuDivider, MenuItem,
@@ -45,9 +46,16 @@ class ReportsTree extends React.Component{
             isOpen: false,
             usePortal: true,
             
-            catName: ''
+            catName: '',
+			notesValue: ""
         };
         
+        
+		if( this.props.editCat !== null ){
+			this.state.notesValue = typeof this.props.editCat.id !== 'undefined' ? this.props.editCat.notes : "";
+		}
+		
+		
         this.filterReports = this.state.reports;
         this.filterText = this.state.text;
         this.filterCategories = this.state.categories;
@@ -57,7 +65,8 @@ class ReportsTree extends React.Component{
         //These hold the category name and notes while editting
         this.catName = this.props.editCat !== null ? this.props.editCat.name : "";
         this.catNote = this.props.editCat !== null ? this.props.editCat. notes : "";
-        
+		this.catDialogTitle = "Add report catgory"
+		
         //This is used to show a progress bar while category details are loading
         this.fetchingCatInfo = false;
         
@@ -69,7 +78,10 @@ class ReportsTree extends React.Component{
     }
     
     handleSaveCategory(){
-        this.props.dispatch(renameReportCategory(this.props.editCat.pk, this.catName, this.catNote));
+        //this.props.dispatch(renameReportCategory(this.props.editCat.pk, this.catName, this.catNote));
+		const catId = this.props.editCat !== null ? this.props.editCat.id : null;
+        this.props.dispatch(saveCategory(this.catName, this.catNotes, catId ));
+        this.isSaving  = true;
     }
     
     /**
@@ -141,7 +153,47 @@ class ReportsTree extends React.Component{
         this.setState({ isContextMenuOpen: true });
 
     }
+	
+	/*
+	* Refresh the report tree
+	*/
+	refreshReportTree = () => {
+		this.props.dispatch(getReports());
+	}
+	
+    openCreateCategoryDialog = () => { 
+		this.props.dispatch(clearEditCategoryState());
+		this.props.dispatch(clearNewCategoryState());
+		this.catName = "";
+		this.catNotes = "";
+		this.catDialogTitle = "Add report category";
+		this.setState({ isOpen: true, notesValue: "" }) 
+	};
+	
+    closeCreateCategoryDialog = () => this.setState({ isOpen: false });
     
+	createCompositeReport = (reportId) => {
+		let tabId  = 'create_composite_report';
+		
+        //Close any open create tab
+        //This is to fix a bug caused by create and edit using the same component
+        this.props.dispatch(closeTab(tabId));
+        this.props.dispatch(clearCreateCompReportState());
+        
+        //The delay is to ensure the previous close has time to clean up
+        setTimeout(()=>{
+			this.props.dispatch(addTab(tabId, 'CreateCompositeReport', {
+				title: typeof reportId === 'number' ? "Edit Composite Report" : "Create Composite Report",
+				options: {
+					reportId: typeof reportId === 'number' ? reportId : null 
+				}
+			}));
+			
+        },10)
+	
+		
+	}
+	
     /**
      * Delete report category 
      * 
@@ -276,6 +328,23 @@ class ReportsTree extends React.Component{
 
         }
     }
+	
+    createReport = () => {
+        let tabId  = 'create_report';
+        
+        //Close any open create tab
+        //This is to fix a bug caused by create and edit using the same component
+        this.props.dispatch(closeTab(tabId));
+        this.props.dispatch(clearReportCreateState());
+        
+        //The delay is toe ensure the previous close has time to clean up
+        setTimeout(()=>{
+            this.props.dispatch(addTab(tabId, 'CreateReport', {
+                title: 'Create Report'
+            }));
+        },10)
+
+    }
     
     /**
      * Open report edit tab. This uses the same component as for creating new
@@ -349,6 +418,7 @@ class ReportsTree extends React.Component{
            if(this.props.editCat.requesting === false){
                 defaultName = this.props.editCat.name;
                 defaultNotes = this.props.editCat.notes;
+				this.catDialogTitle = "Edit report catgory"
                 
                 this.catName = defaultName;
                 this.catNote = defaultNotes;
@@ -368,7 +438,15 @@ class ReportsTree extends React.Component{
         return (
             
         <div>
-          <h6><FontAwesomeIcon icon={ReportsTree.icon}/> Reports</h6>
+		<span className="dropdown-item-text legend w-100 mb-2">
+			<FontAwesomeIcon icon={ReportsTree.icon}/> Reports
+			
+			<a href="/#" title="Reload report tree" onClick={e => e.preventDefault()}><Icon icon="refresh" className="float-right ml-2" onClick={this.refreshReportTree}/></a>&nbsp;
+			<a href="/#" title="Create report category" onClick={e => e.preventDefault()}><Icon icon="folder-new" className="float-right ml-2" onClick={this.openCreateCategoryDialog}/></a> &nbsp; 
+			<a href="/#" title="Create report" onClick={e => e.preventDefault()}><Icon icon="plus" className="float-right ml-2" onClick={this.createReport}/></a> &nbsp;
+			<a href="/#" title="Create composite report" onClick={e => e.preventDefault()}><Icon icon="new-object" className="float-right ml-2" onClick={this.createCompositeReport}/></a> &nbsp;
+		</span>
+		
                 <div>
                 <FormGroup
                     label=""
@@ -419,7 +497,7 @@ class ReportsTree extends React.Component{
             
                 <Dialog
                 icon="folder-new"
-                title="Edit report category"
+                title={this.catDialogTitle}
                 {...this.state}
                 onClose={this.closeEditCategoryDialog}
                 >

@@ -35,6 +35,7 @@ export const CONFIRM_REPORT_CREATED = 'CONFIRM_REPORT_CREATED';
 export const REQUEST_REPORT_DELETION = 'REQUEST_REPORT_DELETION';
 export const CONFIRM_REPORT_DELETION = 'CONFIRM_REPORT_DELETION';
 
+export const CLEAR_REPORT_TREE_ERROR = 'CLEAR_REPORT_TREE_ERROR';
 export const REQUEST_REPORT = 'REQUEST_REPORT';
 export const RECEIVE_REPORT = 'RECEIVE_REPORT';
 
@@ -59,8 +60,6 @@ export const NOTIFY_REPORT_CATEGORY_RENAME_ERROR = 'NOTIFY_REPORT_CATEGORY_RENAM
 
 export const NOTIFY_REPORT_CATEGORY_CREATION_ERROR = 'NOTIFY_REPORT_CATEGORY_CREATION_ERROR';
 
-export const CLEAR_REPORT_TREE_ERROR = 'CLEAR_REPORT_TREE_ERROR';
-
 export const REQUEST_REPORT_CATEGORY = 'REQUEST_REPORT_CATEGORY';
 export const CONFIRM_REPORT_CATEGORY_RECEIVED = 'CONFIRM_REPORT_CATEGORY_RECEIVED';
 
@@ -80,6 +79,34 @@ export const REQUEST_REPORT_DOWNLOAD = 'REQUEST_REPORT_DOWNLOAD'
  */
 export const CLEAR_EDIT_RPT_CATEGORY = 'CLEAR_EDIT_RPT_CATEGORY';
 
+//Clear new category state i.e reports.newCat
+export const CLEAR_NEW_RPT_CATEGORY = 'CLEAR_NEW_RPT_CATEGORY';
+
+//Clear the state used to create and edit a composite report 
+export const CLEAR_CREATE_COMP_RPT_STATE  = 'CLEAR_CREATE_COMP_RPT_STATE';
+
+
+/*
+*Add a report to the composite report
+*/
+export const ADD_TO_COMPOSITE_REPORT = 'ADD_TO_COMPOSITE_REPORT';
+
+//Uupdate composite report during report creation 
+export const UPDATE_COMPOSITE_REPORT_LAYOUT = 'UPDATE_COMPOSITE_REPORT_LAYOUT';
+
+
+//Load composite report info for editting 
+export const LOAD_COMP_RPT_INFO_FOR_EDIT = 'LOAD_REPORT_INFO_FOR_EDIT';
+
+//Confirm composite report is created
+export const CONFIRM_COMP_RPT_CREATION = 'CONFIRM_COMP_RPT_CREATION';
+
+export function loadCompReportInfoForEdit(reportId){
+	return {
+		type: LOAD_COMP_RPT_INFO_FOR_EDIT,
+		reportId: reportId
+	}
+}
 
 export function notifyReportCategoryRenameError(categoryId, error){
     return {
@@ -575,14 +602,19 @@ export function notifyReportCategoryCreationError(error){
  * 
  * @param {type} catName Category nam e
  * @param {type} catNotes Notes about the category
+ * @param integer catId Category ID
  * @returns {undefined}
  */
-export function saveCategory(catName, catNotes){
+export function saveCategory(catName, catNotes, catId){
     return(dispatch, getState) => {
         dispatch(sendCreateReportCategoryRequest());
         
         const authToken = getState().session.userDetails.token;
         let apiEndPoint = '/api/reports/categories' ;
+		
+		if(catId !== null){
+			apiEndPoint += `/${catId}`;		
+		}
         
         let data = {
             name: catName,
@@ -775,4 +807,77 @@ export function getGraphData(reportId){
         });
         
     }
+}
+
+export function clearNewCategoryState(){
+    return {
+        type: CLEAR_NEW_RPT_CATEGORY
+    }
+}
+
+
+/**
+* Clear the state of the create composite report 
+*
+*/
+export function clearCreateCompReportState(){
+    return {
+        type: CLEAR_CREATE_COMP_RPT_STATE
+    }
+}
+
+/**
+* Add report to composite report
+*
+* @param integer compReportId
+* @param integer reportId
+* @param object options layout
+*/
+export function addToCompositeReport(compReportId, reportId, options ){
+	if(typeof compReportId !== 'number') compReportId = null;
+	
+	//@TODO: Insert into db and report compReportId
+	const key = `a${compReportId||"999"}`
+	
+	return {
+		type: ADD_TO_COMPOSITE_REPORT,
+		compReportId: compReportId,
+		reportId: reportId,
+		options: { ...options, key: key}
+	}
+}
+
+/**
+* Get composite report info and load in state.compReport
+*/
+export function getCompReportInfoForEdit(reportId){
+	return (dispatch, getState) => {
+		dispatch(getReportInfo(reportId));
+		
+		//This should be called after call to getReportINfo has completed
+		//dispatch(loadCompReportInfoForEdit(reportId))
+	}	
+}
+
+
+export function saveCompositeReport(reportId, name, catId, options){
+	return async (dispatch, getState) => {
+		//@TODO: action notifying start of saving 
+		
+		const opts = {...options, type: 'Composite'}
+
+	}
+}
+
+
+/**
+* Update during report creation 
+*/
+export function updateCompositeLayout(layout){
+	
+	//@TODO: Update in te
+	return {
+		type: UPDATE_COMPOSITE_REPORT_LAYOUT,
+		layout: layout
+	}
 }

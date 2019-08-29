@@ -41,8 +41,10 @@ class Technologies extends React.Component{
     render(){
         return (
         <div>
-            <h3><FontAwesomeIcon icon={Technologies.icon}/> Technologies</h3>
-            
+                <fieldset className="col-md-12 fieldset">    	
+                    <legend className="legend"><FontAwesomeIcon icon={Technologies.icon}/> Technologies</legend>
+                    
+
             {this.props.requestingData === false ? "" : 
                 <div className="pb-1">
                     <div className="progress">
@@ -61,21 +63,17 @@ class Technologies extends React.Component{
                     </div>
             }
             
-            <div className="card">
-                <div className="card-body p-3">
 
 
-                    <div  className="ag-theme-balham" style={{width: '100%'}}>
-                        <AgGridReact
-                            enableColResize={true}
-                            gridAutoHeight={true}
-                            columnDefs={this.state.columnDefs}
-                            rowData={this.props.data}>
-                        </AgGridReact>
-                    </div>
-                        
-                </div>
-            </div>
+				<div  className="ag-theme-balham" style={{width: '100%'}}>
+					<AgGridReact
+						enableColResize={true}
+						gridAutoHeight={true}
+						columnDefs={this.state.columnDefs}
+						rowData={this.props.data}>
+					</AgGridReact>
+				</div>
+			 </fieldset>       
         </div>
         );
     }

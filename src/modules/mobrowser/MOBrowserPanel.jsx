@@ -115,9 +115,11 @@ class MOBrowserPanel extends React.Component{
         
         return (
         <div>
-            <h6><FontAwesomeIcon icon={MOBrowserPanel.icon}/> MO Browser</h6>
-
-                <div>
+			<span className="dropdown-item-text legend w-100 mb-2">
+				<FontAwesomeIcon icon={MOBrowserPanel.icon}/> MO Browser
+			</span>
+			
+			<div>
                 <input type="text" className="form-control form-control-sm mb-1" placeholder="Search MO" aria-label="Search MO" aria-describedby="search-mo" value={this.props.filter.text} onChange={this.changeEvent}/>
 
                 <div className="row">

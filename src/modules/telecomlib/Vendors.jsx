@@ -41,7 +41,9 @@ class Vendors extends React.Component{
     render(){
         return (
         <div>
-            <h3><FontAwesomeIcon icon={Vendors.icon}/> Vendors</h3>
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon={Vendors.icon}/> Vendors</legend>
+
             
             {this.props.requestingVendors === false ? "" : 
                 <div className="pb-1">
@@ -60,10 +62,6 @@ class Vendors extends React.Component{
                         </button>
                     </div>
             }
-            
-            <div className="card">
-                <div className="card-body p-3">
-
 
                     <div
                         className="ag-theme-balham"
@@ -78,9 +76,7 @@ class Vendors extends React.Component{
                             rowData={this.props.data}>
                         </AgGridReact>
                     </div>
-                        
-                </div>
-            </div>
+            </fieldset>            
         </div>
         );
     }

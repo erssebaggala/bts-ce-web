@@ -137,9 +137,11 @@ class NetworkTree extends React.Component{
         this.updateNodes();
         
         return (
-            <div>
-                <h6><FontAwesomeIcon icon="sitemap"/> Network Tree</h6>
-                        
+            <div>			
+				<span className="dropdown-item-text legend w-100 mb-2">
+					<FontAwesomeIcon icon="sitemap"/> Network Tree
+				</span>
+
                 <FormGroup
                     label=""
                     labelFor="search_network"

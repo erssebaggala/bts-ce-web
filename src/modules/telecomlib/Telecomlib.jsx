@@ -23,10 +23,9 @@ class TelecomLib extends React.Component{
     render(){
         return (
         <div>
-            <h3><FontAwesomeIcon icon="cog"/> Telecom Library</h3>
-
-            <div className="card">
-                <div className="card-body p-3">
+		
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon="cog"/> Telecom Library</legend>
                     <div className="row ">
                         <div className="col-md-6">
                             <div className=""><a href="#" className="load-vendors" onClick={this.addTab('Vendors')}><FontAwesomeIcon icon="arrow-right"/> Vendors</a></div>
@@ -35,8 +34,7 @@ class TelecomLib extends React.Component{
                             <div className=""><a href="#" className="load-technologies" onClick={this.addTab('Technologies')}><FontAwesomeIcon icon="arrow-right"/> Technologies</a></div>
                         </div>
                     </div>
-                </div>
-            </div>
+			</fieldset>
         </div>
         );
     }

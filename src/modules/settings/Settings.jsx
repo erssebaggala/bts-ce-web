@@ -19,12 +19,11 @@ class Settings extends React.Component{
     render(){
         return (
             <div>
-                <h3><FontAwesomeIcon icon="cog"/> Settings</h3>
-                <div className="card">
-                    <div className="card-body p-3">
-                    <a href="#" className="launch-cm-menu"><FontAwesomeIcon icon="arrow-right"/><span> Configuration management</span></a>
-                    </div>
-                </div>
+                <fieldset className="col-md-12 fieldset">    	
+                    <legend className="legend"><FontAwesomeIcon icon="cog"/> Settings</legend>
+					<a href="#" className="launch-cm-menu"><FontAwesomeIcon icon="arrow-right"/><span> Configuration management</span></a>
+				</fieldset>
+
             </div>
         );
     }

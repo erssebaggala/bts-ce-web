@@ -27,6 +27,7 @@ import NetAuditRuleData from '../networkaudit/NetauditRuleData';
 import { closeTab, setActiveTab } from './uilayout-actions';
 import { Breadcrumb, OverflowList, Boundary, Position, Classes, MenuItem, 
     Popover, Menu, Icon } from "@blueprintjs/core";
+import CreateCompositeReport from '../reports/CreateCompositeReport';
 
 const Components = {
     "Help": Help,
@@ -51,7 +52,9 @@ const Components = {
     "NMSConnectionDetails": NMSConnectionDetails,
     "CMScheduler": CMScheduler,
     "CMDumpLocations": CMDumpLocations,
-    "SiteStats": SiteStats
+    "SiteStats": SiteStats,
+	"CreateCompositeReport": CreateCompositeReport,
+	
     };
 
 class Tabs extends React.Component {

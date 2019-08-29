@@ -21,15 +21,11 @@ class NetworkAudit extends React.Component{
         return (
                 
         <div>
-
-            <h3><FontAwesomeIcon icon={NetworkAudit.icon}/> Network Audit</h3>
-            
-            <div className="card  mb-2">
-                <div className="card-body p-3">
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon={NetworkAudit.icon}/> Network Audit</legend>
                     <a href="#" className="launch-network-tree" onClick={this.setSidePanel}><FontAwesomeIcon icon="arrow-right"/> View audit rules</a>        
-                </div>
-            </div>
-        </div>
+			</fieldset>
+		</div>
         );
     }
 }

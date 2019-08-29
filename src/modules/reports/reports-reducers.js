@@ -10,9 +10,40 @@ import { REQUEST_REPORTS, RECEIVE_REPORTS, NOTIFY_REPORT_REQUEST_ERROR,
         SEND_RENAME_RPT_CATEGORY_REQ, CONFIRM_RPT_CATEGORY_RENAMING, 
         REQUEST_REPORT_CATEGORY, NOTIFY_REPORT_CATEGORY_RENAME_ERROR,
         CONFIRM_REPORT_CATEGORY_RECEIVED, CLEAR_EDIT_RPT_CATEGORY,
-        RECEIVE_GRAPH_DATA, REQUEST_REPORT_DOWNLOAD} 
+        RECEIVE_GRAPH_DATA, REQUEST_REPORT_DOWNLOAD,
+		//Table report 
+		NOTIFY_RECEIVE_REPORT_FIELDS_FAILURE,
+		
+		//Clear state.compReport before editing or creating new report
+		CLEAR_CREATE_COMP_RPT_STATE,
+		
+		//Composite reports 
+		ADD_TO_COMPOSITE_REPORT,
+		UPDATE_COMPOSITE_REPORT_LAYOUT,
+		
+		//Load comp reprt info edit 
+		LOAD_COMP_RPT_INFO_FOR_EDIT,
+		
+		CONFIRM_COMP_RPT_CREATION,
+		
+		
+		//Clear
+		CLEAR_NEW_RPT_CATEGORY
+		} 
      from './reports-actions';
 
+/*Initial composite report*/
+const InitialCompositeReport = {
+	//if number/integer, then we are in edit mode 
+	edit: null,
+
+	//{i: 'a', x: 0, y: 0, w: 2, h: 2},
+	//{i: 'b', x: 3, y: 0, w: 2, h: 2},
+	layout: [],
+	columns: 4, //4 columns initially,
+	name: "Composite report",
+	catId: null
+};
 
 let initialState = {
     
@@ -24,7 +55,7 @@ let initialState = {
     //Report tree filtering state
     filter:{
         text: '',
-        reports: true,
+        reports: false,
         categories: false
     },
     
@@ -33,6 +64,25 @@ let initialState = {
     reportsdata:{},
     
     //Meta data about a report when being displayed
+	/*
+	* {
+	'reportId':{
+		category_id: integer_value,
+		error: null,
+		id: integer_value, //report id 
+		name: stringValue, //report name 
+		notes: stringValue, //reports notes 
+		query: stringValue, //report query 
+		type: table|pie|bar|scatter|compound, // report type
+		options: { //
+			data: {}, //Ploty data options for charts 
+			layout: {}, //Plotly layout options for charts 
+			type: table|chart, //table|chart . From the old api
+			}
+		
+		}
+	}
+	*/
     reportsInfo:{},
     
     //Contains all report creation related data
@@ -247,7 +297,7 @@ export default function reports(state = initialState, action){
                 return {
                     ...state,
                     requestingReports: false,
-                    editCat: { ...action.data , requesting: false}
+                    editCat: { ...action.data , requesting: false, id: action.categoryId}
                 }
             case REQUEST_REPORT_CATEGORY:
                 return {
@@ -292,7 +342,49 @@ export default function reports(state = initialState, action){
                         }
                     }
                 }
-                
+			case ADD_TO_COMPOSITE_REPORT:
+				 return {
+					 ...state,
+					 compReport: {
+						 ...state.compReport,
+						 layout: [...state.compReport.layout, action.options.layout],
+						 reports: {
+							 ...state.compReport.reports, 
+							 [action.key]: action.reportId }
+					 }
+				 }
+			case UPDATE_COMPOSITE_REPORT_LAYOUT:
+				return {
+					...state,
+					compReport: {
+						...state.compReport,
+						layout: action.layout
+					}
+				}
+			case CLEAR_CREATE_COMP_RPT_STATE:
+				return {
+					...state,
+					compReport: InitialCompositeReport
+				}
+			case LOAD_COMP_RPT_INFO_FOR_EDIT:
+				return {
+					...state,
+					compReport: {
+						edit: action.reportId,
+						layout: state.reportsInfo[action.reportId].options.layout,
+						columns: 4,
+						name: state.reportsInfo[action.reportId].options.name,
+						catId: state.reportsInfo[action.reportId].options.catId,
+					}
+				}
+			case CONFIRM_COMP_RPT_CREATION:
+				return {
+					...state,
+					reportsInfo: {
+						...state.reports.reportsInfo,
+						[action.reportId]: action.data
+					}
+				}
             default:
                 return state;
         }

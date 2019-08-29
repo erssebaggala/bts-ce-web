@@ -9,12 +9,9 @@ export default class Help extends React.Component {
     render(){
         return (
             <div>
-                <h3><FontAwesomeIcon icon="question-circle"/> Help</h3>
-
-                <div className="card">
-                
-                  <div className="card-body">
-                    <h4 className="card-title">About</h4>
+                <fieldset className="col-md-12 fieldset">    	
+                    <legend className="legend"><FontAwesomeIcon icon="question-circle"/> Help</legend>
+                    
                     <p className="card-text"> 
                         <b>Boda Telecom Suite - CE</b> (BTS-CE) is an open source telecommunication network management platform. The project aims to leverage the best in open source software , big data and machine learning to provide a feature rich platform for network management..
                     </p>
@@ -31,9 +28,7 @@ export default class Help extends React.Component {
                     <p>
                         For commercial inquiries visit <a href="http://www.bodastage.com" target="_blank">http://www.bodastage.com</a> or send an email to info@bodastage.com.
                     </p>
-
-                  </div>
-                </div>
+				</fieldset>
             </div>    
         );
     }

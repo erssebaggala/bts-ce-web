@@ -33,13 +33,10 @@ class NetworkBrowser extends React.Component{
         return (
                 
         <div>
-            <h3><FontAwesomeIcon icon={NetworkBrowser.icon}/> Network Browser</h3>
-
-            <div className="card  mb-2">
-                <div className="card-body p-3">
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon={NetworkBrowser.icon}/> Network Browser</legend>
                     <a href="#" className="launch-network-tree" onClick={this.showNetworkTree}><FontAwesomeIcon icon="arrow-right"/> View network tree</a>        
-                </div>
-            </div>
+			</fieldset>
         </div>
         );
     }

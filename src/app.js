@@ -1,8 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import configureStore from './configure-store';
 import LoginForm from './modules/session/LoginForm';
-import UILayout from './modules/layout/UILayout';
-import { connect } from 'react-redux';
+import UILayoutContainer from './modules/layout/UILayoutContainer';
+import ErrorBoundary from './modules/layout/ErrorBoundary';
 
 class App extends React.Component {
   constructor(props){
@@ -12,10 +13,18 @@ class App extends React.Component {
   render() {
       
         if (this.props.authenticated === false) {
-            return (<LoginForm/>);
+            return (
+				<ErrorBoundary>
+					<LoginForm/>
+				</ErrorBoundary>
+				);
         }
         
-        return (<UILayout/>);
+        return (
+			<ErrorBoundary>
+				<UILayoutContainer/>
+			</ErrorBoundary>
+		);
   }
 }
 

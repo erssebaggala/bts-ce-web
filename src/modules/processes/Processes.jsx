@@ -22,16 +22,13 @@ class Processes extends React.Component{
         return (
                 
         <div>
-            <h3><FontAwesomeIcon icon={Processes.icon}/> Processes</h3>
-
-            <div className="card">
-                <div className="card-body p-3">
+			<fieldset className="col-md-12 fieldset">    	
+				<legend className="legend"><FontAwesomeIcon icon={Processes.icon}/> Processes</legend>
                     <div className="row">
                         <div className="col-md-6"><a href="#" className="launch-airflow" onClick={this.addTab('Airflow')}><FontAwesomeIcon icon="arrow-right"/> Airflow</a></div>
                         <div className="col-md-6"><a href="#" className="launch-rabbitmq" onClick={this.addTab('RabbitMQ')}><FontAwesomeIcon icon="arrow-right"/> RabbitMQ</a></div>
                     </div>
-                </div>
-            </div>
+			</fieldset>
         </div>
         
 

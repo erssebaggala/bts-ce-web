@@ -175,11 +175,11 @@ class AuditRuleTree extends React.Component{
         return (
             
         <div>
-            <div class="sidepanel-header">
-                <h6 class="bp4-heading"><FontAwesomeIcon icon={AuditRuleTree.icon}/> Network Audit Rules</h6>
-            </div>
-                <div>
-
+			<span className="dropdown-item-text legend w-100 mb-2">
+				<FontAwesomeIcon icon={AuditRuleTree.icon}/> Network Audit Rules
+			</span>
+			
+			<div>
                 <FormGroup
                     label=""
                     labelFor="search_network"
